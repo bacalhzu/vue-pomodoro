@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --white: #f0f0f0;
+  --black: #0a0a0a;
+
+  --primary: #86469C;
+  --primary-light: #BC7FCD;
+  --secondary: #FB9AD1;
+  --secondary-light: #FFCDEA;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --black: #f0f0f0;
+    --white: #0a0a0a;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

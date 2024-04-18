@@ -1,0 +1,13 @@
+@import './base.css';
+
+body {
+
+    background-color: var(--primary);
+    color: var(--secondary-light);
+
+    min-height: 100vh;
+    
+    font-family: "Nunito";
+    font-size: 14px;
+}
+  
