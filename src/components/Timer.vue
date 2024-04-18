@@ -25,7 +25,7 @@
 <style scoped>
 
     .timer {
-        width: 390px;
+        width: 380px;
 
         display: flex;
         flex-direction: column;
