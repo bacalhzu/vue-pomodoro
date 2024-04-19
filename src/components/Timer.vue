@@ -9,7 +9,7 @@ const timer = reactive({
     active: false, 
     countdown: {
         minutes: 0, 
-        seconds: 10
+        seconds: 3
     },
 });
 
@@ -56,8 +56,9 @@ async function playAudio() {
     .then(res => {
         // console.log(res.default);
         let audio = new Audio();
+        audio.autoplay = true;
         audio.src = res.default;
-        audio.play();
+        // audio.play();
     });
 }
 
