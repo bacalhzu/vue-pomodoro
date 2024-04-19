@@ -7,7 +7,7 @@ function zeroFill(value) {
 
 const config = reactive({
     timer: {
-        types: [
+        phases: [
             'focus',
             'short',
             'long',
@@ -32,14 +32,14 @@ const config = reactive({
 
 const timer = reactive({
     active: false, 
-    currentType: 'focus',
+    currentPhase: 'focus',
     currentInterval: 1,
     countdown: {
         minutes: config.timer.duration.focus.maxMinutes, 
         seconds: config.timer.duration.focus.maxSeconds,
         completion: computed(() => {
-            const currentType = timer.currentType;
-            const configDuration = config.timer.duration[currentType];
+            const currentPhase = timer.currentPhase;
+            const configDuration = config.timer.duration[currentPhase];
             const timerCountdown = timer.countdown;
 
             const totalSeconds = configDuration.maxMinutes * 60 + configDuration.maxSeconds;
@@ -54,7 +54,7 @@ const message = computed(() => {
 
     let message = '';
 
-    switch (timer.currentType) {
+    switch (timer.currentPhase) {
         case 'focus': 
             message = 'Time to focus!'; 
             break;
@@ -95,8 +95,8 @@ function finishTimer() {
     stopTimer();
 
     
-    let nextType = timer.currentType;
-    if (timer.currentType === 'focus') {
+    let nextType = timer.currentPhase;
+    if (timer.currentPhase === 'focus') {
         nextType = 'short';
         if(timer.currentInterval >= 4) {
             timer.currentInterval = 0;
@@ -112,9 +112,9 @@ function finishTimer() {
 
 function resetTimer(type) {
     timer.active = false;
-    timer.currentType = type;
-    timer.countdown.minutes = config.timer.duration[timer.currentType].maxMinutes;
-    timer.countdown.seconds = config.timer.duration[timer.currentType].maxSeconds;   
+    timer.currentPhase = type;
+    timer.countdown.minutes = config.timer.duration[timer.currentPhase].maxMinutes;
+    timer.countdown.seconds = config.timer.duration[timer.currentPhase].maxSeconds;   
 }
 
 function executeTimer() {
