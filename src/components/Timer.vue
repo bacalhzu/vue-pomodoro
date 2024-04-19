@@ -8,8 +8,8 @@ function zeroFill(value) {
 const config = reactive({
     timer: {
         focus: {
-            maxMinutes: 10,
-            maxSeconds: 0 
+            maxMinutes: 0,
+            maxSeconds: 10 
         },
         short: {
             maxMinutes: 5,
