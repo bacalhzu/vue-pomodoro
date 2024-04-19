@@ -1,15 +1,38 @@
 <script setup>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 
 function zeroFill(value) {
     return ('00'+value).slice(-2);
 }
 
+const config = reactive({
+    timer: {
+        focus: {
+            maxMinutes: 10,
+            maxSeconds: 0 
+        },
+        short: {
+            maxMinutes: 5,
+            maxSeconds: 0  
+        },
+        long: {
+            maxMinutes: 20,
+            maxSeconds: 0  
+        }
+    }
+})
+
 const timer = reactive({
     active: false, 
     countdown: {
-        minutes: 0, 
-        seconds: 5
+        minutes: config.timer.focus.maxMinutes, 
+        seconds: config.timer.focus.maxSeconds,
+        completion: computed(() => {
+            let totalSeconds = config.timer.focus.maxMinutes * 60 + config.timer.focus.maxSeconds;
+            let remainingSeconds = timer.countdown.minutes * 60 + timer.countdown.seconds;
+
+            return 100.0 - (remainingSeconds / totalSeconds) * 100.0;
+        })
     },
 });
 
@@ -36,7 +59,9 @@ function stopTimer() {
 
 function executeTimer() {
     // console.log("timer tick");
-    timer.countdown.seconds--;
+
+    if (timer.countdown.seconds > 0)
+        timer.countdown.seconds--;
 
     if (timer.countdown.seconds === 0) {
         if (timer.countdown.minutes === 0) {    
@@ -48,9 +73,10 @@ function executeTimer() {
         timer.countdown.seconds = 59;
         timer.countdown.minutes--;            
     }
+    
 }
 
-async function playAudio() {
+function playAudio() {
 
     import('@/assets/audio/finished_777.ogg')
     .then(res => {
@@ -64,6 +90,9 @@ async function playAudio() {
 
 <template>
     <div class="timer">
+        <div class="timer-progress">
+            <div class="timer-progress-fill" :style="{width: timer.countdown.completion + '%'}"></div>
+        </div>
         <div class="timer-display">
             <div class="timer-display-number dn-minutes">{{ zeroFill(timer.countdown.minutes) }}</div>
             <div class="timer-display-number dn-sep">:</div>
@@ -71,7 +100,7 @@ async function playAudio() {
         </div>
 
         <div class="timer-controls">
-            <button class="timer-controls-button tcb-toggle" :class="timer.active ? 'active' : ''" @click="toggleTimer()">
+            <button class="timer-controls-button tcb-toggle" :class="{active: timer.active}" @click="toggleTimer()">
                 {{ timer.active ? 'PAUSE' : 'START' }}
             </button>
 
@@ -131,6 +160,26 @@ async function playAudio() {
         box-shadow: var(--primary-shadow) 0 1.95px 2.6px;
 
         border-radius: 5px;
+    }
+
+    .timer-progress {
+
+        margin: 10px 0;
+
+        height: 3px;
+        width: 100%;
+
+        border-radius: 5px; 
+
+        background-color: var(--primary-dark);
+    }
+
+    .timer-progress-fill {
+        height: inherit;
+        width: 0;
+
+        border-radius: inherit;
+        background-color: #f0f0f0;
     }
 
     .timer-controls {
