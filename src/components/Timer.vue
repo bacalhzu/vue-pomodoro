@@ -8,7 +8,7 @@ function zeroFill(value) {
 const timer = reactive({
     active: false, 
     countdown: {
-        minutes: 1, 
+        minutes: 0, 
         seconds: 10
     },
 });
