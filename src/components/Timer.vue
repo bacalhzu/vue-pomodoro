@@ -7,33 +7,66 @@ function zeroFill(value) {
 
 const config = reactive({
     timer: {
-        focus: {
-            maxMinutes: 0,
-            maxSeconds: 10 
-        },
-        short: {
-            maxMinutes: 5,
-            maxSeconds: 0  
-        },
-        long: {
-            maxMinutes: 20,
-            maxSeconds: 0  
+        types: [
+            'focus',
+            'short',
+            'long',
+        ],
+        longBreakInterval: 4,
+        duration: {
+            focus: {
+                maxMinutes: 0,
+                maxSeconds: 2 
+            },
+            short: {
+                maxMinutes: 0,
+                maxSeconds: 3  
+            },
+            long: {
+                maxMinutes: 0,
+                maxSeconds: 4  
+            }
         }
     }
 })
 
 const timer = reactive({
     active: false, 
+    currentType: 'focus',
+    currentInterval: 1,
     countdown: {
-        minutes: config.timer.focus.maxMinutes, 
-        seconds: config.timer.focus.maxSeconds,
+        minutes: config.timer.duration.focus.maxMinutes, 
+        seconds: config.timer.duration.focus.maxSeconds,
         completion: computed(() => {
-            let totalSeconds = config.timer.focus.maxMinutes * 60 + config.timer.focus.maxSeconds;
-            let remainingSeconds = timer.countdown.minutes * 60 + timer.countdown.seconds;
+            const currentType = timer.currentType;
+            const configDuration = config.timer.duration[currentType];
+            const timerCountdown = timer.countdown;
+
+            const totalSeconds = configDuration.maxMinutes * 60 + configDuration.maxSeconds;
+            const remainingSeconds = timerCountdown.minutes * 60 + timerCountdown.seconds;
 
             return 100.0 - (remainingSeconds / totalSeconds) * 100.0;
         })
     },
+});
+
+const message = computed(() => {
+
+    let message = '';
+
+    switch (timer.currentType) {
+        case 'focus': 
+            message = 'Time to focus!'; 
+            break;
+        case 'short': 
+            message = 'Time for a short break!'; 
+            break;
+        case 'long': 
+            message = 'Time for a long break!'; 
+            break;
+    }
+
+    return message;
 });
 
 let timerInterval;
@@ -57,6 +90,33 @@ function stopTimer() {
     clearInterval(timerInterval);
 }
 
+function finishTimer() {
+    playAudio();        
+    stopTimer();
+
+    
+    let nextType = timer.currentType;
+    if (timer.currentType === 'focus') {
+        nextType = 'short';
+        if(timer.currentInterval >= 4) {
+            timer.currentInterval = 0;
+            nextType = 'long';
+        }
+        timer.currentInterval++;
+    }
+    else 
+        nextType = 'focus'
+    
+    resetTimer(nextType);
+}
+
+function resetTimer(type) {
+    timer.active = false;
+    timer.currentType = type;
+    timer.countdown.minutes = config.timer.duration[timer.currentType].maxMinutes;
+    timer.countdown.seconds = config.timer.duration[timer.currentType].maxSeconds;   
+}
+
 function executeTimer() {
     // console.log("timer tick");
 
@@ -65,15 +125,13 @@ function executeTimer() {
 
     if (timer.countdown.seconds === 0) {
         if (timer.countdown.minutes === 0) {    
-            playAudio();        
-            stopTimer();
+            finishTimer();
             return;
         }
         
         timer.countdown.seconds = 59;
         timer.countdown.minutes--;            
     }
-    
 }
 
 function playAudio() {
@@ -90,6 +148,8 @@ function playAudio() {
 
 <template>
     <div class="timer">
+
+        <div class="timer-message">{{ message }}</div>
         <div class="timer-progress">
             <div class="timer-progress-fill" :style="{width: timer.countdown.completion + '%'}"></div>
         </div>
@@ -162,11 +222,16 @@ function playAudio() {
         border-radius: 5px;
     }
 
+    .timer-message {
+        font-size: 16pt;
+        margin-bottom: 20px;
+    }
+
     .timer-progress {
 
-        margin: 10px 0;
+        margin-bottom: 20px;
 
-        height: 3px;
+        height: 5px;
         width: 100%;
 
         border-radius: 5px; 
