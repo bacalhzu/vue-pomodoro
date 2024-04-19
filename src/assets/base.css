@@ -4,8 +4,11 @@
   --white: #f0f0f0;
   --black: #0a0a0a;
 
+  
   --primary: #86469C;
   --primary-light: #BC7FCD;
+  --primary-dark: #6b317e;
+  --primary-shadow: #461357;
   --secondary: #FB9AD1;
   --secondary-light: #FFCDEA;
 }

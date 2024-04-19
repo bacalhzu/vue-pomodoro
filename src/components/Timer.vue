@@ -5,34 +5,48 @@ function zeroFill(value) {
     return ('00'+value).slice(-2);
 }
 
-const timerValues = reactive({minutes: 1, seconds: 10});
+const timer = reactive({
+    active: false, 
+    countdown: {
+        minutes: 1, 
+        seconds: 10
+    },
+});
 
-let timer;
+let timerInterval;
+function toggleTimer() {
+    
+    if (timer.active === false)
+        startTimer();
+    else 
+        stopTimer();
+    
+    timer.active = !timer.active;
+}
+
 function startTimer() {
-    console.log("timer started");
-    timer = setInterval(executeTimer, 1000);
+    // console.log("timer started");
+    timerInterval = setInterval(executeTimer, 1000);
 }
 
 function stopTimer() {
-    console.log("timer finished");
-    clearInterval(timer);
+    // console.log("timer stopped");
+    clearInterval(timerInterval);
 }
 
 function executeTimer() {
-    console.log("timer tick");
-    timerValues.seconds--;
+    // console.log("timer tick");
+    timer.countdown.seconds--;
 
-    if (timerValues.seconds === 0) {
-        if (timerValues.minutes === 0) {
+    if (timer.countdown.seconds === 0) {
+        if (timer.countdown.minutes === 0) {
             stopTimer();
             return;
         }
         
-        timerValues.seconds = 59;
-        timerValues.minutes--;            
+        timer.countdown.seconds = 59;
+        timer.countdown.minutes--;            
     }
-
-    
 }
 
 </script>
@@ -40,14 +54,14 @@ function executeTimer() {
 <template>
     <div class="timer">
         <div class="timer-display">
-            <div class="timer-display-number dn-minutes">{{ zeroFill(timerValues.minutes) }}</div>
+            <div class="timer-display-number dn-minutes">{{ zeroFill(timer.countdown.minutes) }}</div>
             <div class="timer-display-number dn-sep">:</div>
-            <div class="timer-display-number dn-seconds">{{ zeroFill(timerValues.seconds) }}</div>
+            <div class="timer-display-number dn-seconds">{{ zeroFill(timer.countdown.seconds) }}</div>
         </div>
 
         <div class="timer-controls">
-            <button class="timer-controls-button tcb-toggle" @click="startTimer()">
-                START
+            <button class="timer-controls-button tcb-toggle" :class="timer.active ? 'active' : ''" @click="toggleTimer()">
+                {{ timer.active ? 'PAUSE' : 'START' }}
             </button>
             <!-- <button class="timer-controls-button tcb-toggle" @click="stopTimer()">
                 STOP
@@ -101,6 +115,9 @@ function executeTimer() {
         width: 50%;
         /* padding: 0 25px; */
         background-color: var(--primary-light);
+
+        box-shadow: var(--primary-shadow) 0 1.95px 2.6px;
+
         border-radius: 5px;
     }
 
@@ -131,5 +148,15 @@ function executeTimer() {
         border-radius: 5px;
 
         cursor: pointer;
+
+        box-shadow: var(--primary-shadow) 0 1.95px 2.6px;
+
+        /* box-shadow: var(--primary-shadow) 0px 3px 6px, var(--primary-shadow) 0px 3px 6px; */
     }
+    .tcb-toggle.active {
+        background-color: var(--primary-dark);
+        color: white;
+    }
+
+
 </style>
