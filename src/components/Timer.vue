@@ -57,6 +57,8 @@ async function playAudio() {
         // console.log(res.default);
         let audio = new Audio(res.default);
         audio.play();
+        audio.pause();
+        audio.play();
     });
 }
 
