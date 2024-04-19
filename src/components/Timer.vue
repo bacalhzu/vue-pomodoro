@@ -9,7 +9,7 @@ const timer = reactive({
     active: false, 
     countdown: {
         minutes: 0, 
-        seconds: 3
+        seconds: 5
     },
 });
 
