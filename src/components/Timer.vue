@@ -39,7 +39,8 @@ function executeTimer() {
     timer.countdown.seconds--;
 
     if (timer.countdown.seconds === 0) {
-        if (timer.countdown.minutes === 0) {
+        if (timer.countdown.minutes === 0) {    
+            playAudio();        
             stopTimer();
             return;
         }
@@ -47,6 +48,16 @@ function executeTimer() {
         timer.countdown.seconds = 59;
         timer.countdown.minutes--;            
     }
+}
+
+async function playAudio() {
+
+    import('@/assets/audio/finished_777.ogg')
+    .then(res => {
+        // console.log(res.default);
+        let audio = new Audio(res.default);
+        audio.play();
+    });
 }
 
 </script>
@@ -63,6 +74,7 @@ function executeTimer() {
             <button class="timer-controls-button tcb-toggle" :class="timer.active ? 'active' : ''" @click="toggleTimer()">
                 {{ timer.active ? 'PAUSE' : 'START' }}
             </button>
+
             <!-- <button class="timer-controls-button tcb-toggle" @click="stopTimer()">
                 STOP
             </button> -->
