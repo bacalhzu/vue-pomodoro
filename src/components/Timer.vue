@@ -55,9 +55,8 @@ async function playAudio() {
     import('@/assets/audio/finished_777.ogg')
     .then(res => {
         // console.log(res.default);
-        let audio = new Audio(res.default);
-        audio.play();
-        audio.pause();
+        let audio = new Audio();
+        audio.src = res.default;
         audio.play();
     });
 }
