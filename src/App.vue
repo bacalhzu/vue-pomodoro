@@ -5,6 +5,10 @@ import Timer from './components/Timer.vue';
 <template>
   <main>
     <Timer />
+    <footer>
+        <span class="madeby">Made by Davi Bacalhau ♥</span>     
+        <a class="madeby-link" href="http://littlesekii.com" target="_blank">littlesekii.com</a>
+    </footer>
   </main>
 </template>
 
@@ -19,9 +23,26 @@ import Timer from './components/Timer.vue';
 
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        /* justify-content: center; */
         align-items: center;
 
-        margin-top: -80px;
+        padding-top: 20vh;
+    }
+    footer {
+        /* background-color: aliceblue; */
+        position: absolute;
+        top: calc(100vh - 60px);
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .madeby {
+        font-size: 14pt;
+    }
+    .madeby-link {
+        /* text-decoration: none; */
+        color: inherit;
     }
 </style>

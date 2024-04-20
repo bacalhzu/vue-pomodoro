@@ -15,16 +15,16 @@ const config = reactive({
         longBreakInterval: 4,
         duration: {
             focus: {
-                maxMinutes: 0,
-                maxSeconds: 2 
+                maxMinutes: 25,
+                maxSeconds: 0 
             },
             short: {
-                maxMinutes: 0,
-                maxSeconds: 3  
+                maxMinutes: 5,
+                maxSeconds: 0  
             },
             long: {
-                maxMinutes: 0,
-                maxSeconds: 4  
+                maxMinutes: 15,
+                maxSeconds: 0  
             }
         }
     }
@@ -90,8 +90,10 @@ function stopTimer() {
     clearInterval(timerInterval);
 }
 
-function finishTimer() {
-    playAudio();        
+function finishTimer(skip = false) {
+    if (!skip)
+        playAudio();        
+
     stopTimer();
 
     
@@ -167,9 +169,13 @@ function playAudio() {
             <!-- <button class="timer-controls-button tcb-toggle" @click="stopTimer()">
                 STOP
             </button> -->
-            <!-- <button class="timer-controls-button tcb-toggle">
-                RESET
-            </button> -->
+            <button 
+                :style="{marginTop: (timer.active) ? '0px' : '-65px', opacity: (timer.active) ? '1' : '0'}" 
+                
+                class="timer-controls-button tcb-skip"
+                @click="finishTimer(skip=true)">
+                SKIP
+            </button>
         </div>
     </div>
 
@@ -178,7 +184,8 @@ function playAudio() {
 <style scoped>
 
     .timer {
-        width: 380px;
+        max-width: 400px;
+        width: 95%;
 
         display: flex;
         flex-direction: column;
@@ -245,6 +252,8 @@ function playAudio() {
 
         border-radius: inherit;
         background-color: #f0f0f0;
+
+        transition: width 0.2s;
     }
 
     .timer-controls {
@@ -277,11 +286,21 @@ function playAudio() {
 
         box-shadow: var(--primary-shadow) 0 1.95px 2.6px;
 
+        transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+
         /* box-shadow: var(--primary-shadow) 0px 3px 6px, var(--primary-shadow) 0px 3px 6px; */
+    }
+    .tcb-toggle {
+        z-index: 1;
     }
     .tcb-toggle.active {
         background-color: var(--primary-dark);
         color: white;
+    }
+    .tcb-skip {
+        background-color: var(--secondary-light);
+
+        transition: margin 0.5s, opacity 0.5s;
     }
 
 
