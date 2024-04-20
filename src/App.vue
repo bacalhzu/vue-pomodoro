@@ -4,7 +4,7 @@ import Timer from './components/Timer.vue';
 
 <template>
   <main>
-    <Timer />
+    <Timer class="timer"/>
     <footer>
         <span class="madeby">Made by Davi Bacalhau ♥</span>     
         <a class="madeby-link" href="http://littlesekii.com" target="_blank">littlesekii.com</a>
@@ -16,7 +16,7 @@ import Timer from './components/Timer.vue';
     main {        
         /* background-color: #000; */
 
-        height: calc(100vh - 60px);
+        height: 100vh;
 
         margin: auto;
         max-width: 600px;
@@ -25,19 +25,20 @@ import Timer from './components/Timer.vue';
         flex-direction: column;
         /* justify-content: center; */
         align-items: center;
-
-        padding-top: 20vh;
+    }
+    .timer {
+        /* background-color: aqua; */
+        margin: auto;
     }
     footer {
 
         /* background-color: aliceblue; */
         width: 100%;
-        position: absolute;
-        top: calc(100vh - 60px);
+        height: 60px;
 
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
     }
 
