@@ -30,6 +30,8 @@ import Timer from './components/Timer.vue';
     .timer {
         z-index: 1;
         background-color: var(--primary);
+
+        margin-top: 120px;
         padding-top: 20px;
         padding-bottom: 20px;
     }
@@ -37,15 +39,15 @@ import Timer from './components/Timer.vue';
         z-index: 0;
         /* background-color: aliceblue; */
         width: 100%;
-        height: 60px;
+        height: 120px;
 
         position: absolute;
 
-        top: calc(100vh - 60px);
+        top: calc(100vh - 120px);
 
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: flex;
         align-items: center;
     }
 
