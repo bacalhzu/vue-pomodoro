@@ -5,18 +5,18 @@ import Timer from './components/Timer.vue';
 <template>
   <main>
     <Timer />
-  </main>
-  <footer>
+    <footer>
         <span class="madeby">Made by Davi Bacalhau ♥</span>     
         <a class="madeby-link" href="http://littlesekii.com" target="_blank">littlesekii.com</a>
     </footer>
+  </main>
 </template>
 
 <style scoped>
     main {        
         /* background-color: #000; */
 
-        height: 100vh;
+        height: calc(100vh - 60px);
 
         margin: auto;
         max-width: 600px;
