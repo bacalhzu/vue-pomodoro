@@ -146,14 +146,28 @@ function playAudio() {
     });
 }
 
+function showSettings() {
+    alert("Coming soon!")
+}
 </script>
 
 <template>
     <div class="timer">
-
-        <div class="timer-message">{{ message }}</div>
-        <div class="timer-progress">
-            <div class="timer-progress-fill" :style="{width: timer.countdown.completion + '%'}"></div>
+        <div class="timer-message">
+            {{ message }}
+        </div>
+        <div class="timer-details">
+            <div class="timer-progress">
+                <div class="timer-progress-fill" :style="{width: timer.countdown.completion + '%'}"></div>                
+            </div>
+            <img 
+                class="settings-button" 
+                width="19.5" 
+                height="19.5" 
+                src="@/assets/icons/gear.svg" 
+                alt="settings change icon"
+                @click="showSettings()"
+            >
         </div>
         <div class="timer-display">
             <div class="timer-display-number dn-minutes">{{ zeroFill(timer.countdown.minutes) }}</div>
@@ -171,9 +185,10 @@ function playAudio() {
             </button> -->
             <button 
                 :style="{marginTop: (timer.active) ? '0px' : '-65px', opacity: (timer.active) ? '1' : '0'}" 
-                
+                :disabled="!timer.active"
                 class="timer-controls-button tcb-skip"
-                @click="finishTimer(skip=true)">
+                @click="finishTimer(skip=true)"
+            >
                 SKIP
             </button>
         </div>
@@ -231,12 +246,22 @@ function playAudio() {
 
     .timer-message {
         font-size: 16pt;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
     }
 
-    .timer-progress {
+    .timer-details {
+        display: flex;
+        align-items: center;
 
-        margin-bottom: 20px;
+        width: 100%;
+
+        gap: 10px;
+        padding: 0 10px;
+
+        margin-bottom: 10px;
+
+    }
+    .timer-progress {
 
         height: 5px;
         width: 100%;
@@ -254,6 +279,10 @@ function playAudio() {
         background-color: #f0f0f0;
 
         transition: width 0.2s;
+    }
+
+    .settings-button {
+        cursor: pointer;
     }
 
     .timer-controls {

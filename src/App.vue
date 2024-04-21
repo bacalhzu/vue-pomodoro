@@ -4,6 +4,9 @@ import Timer from './components/Timer.vue';
 
 <template>
     <main>
+        <header>        
+            <a class="logo" href=".">Simplemodoro</a>   
+        </header>
         <Timer class="timer"/>
         <footer>
             <span class="madeby">Made by Davi Bacalhau ♥</span>     
@@ -15,13 +18,35 @@ import Timer from './components/Timer.vue';
 </template>
 
 <style scoped>
+
+    header {
+        width: 95%;
+        height: 60px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* background-color: aqua; */
+
+        /* border-bottom: 2px solid var(--primary-dark); */
+        /* border-bottom: 2px solid white; */
+        margin-bottom: 40px;
+    }
+    .logo {
+        color: #FFF;
+        text-decoration: none;
+        border-bottom: 2px solid var(--primary-light);
+
+        padding: 10px 50px;
+        font-size: 16pt;
+    }
     main {        
         /* background-color: #000; */
 
         height: 100vh;
 
-        /* margin: auto; */
-        /* max-width: 600px; */
+        margin: auto;
+        max-width: 600px;
 
         display: flex;
         flex-direction: column;
