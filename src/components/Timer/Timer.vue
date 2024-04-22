@@ -2,8 +2,9 @@
 import { computed, reactive } from 'vue';
 import timerWorker from './timerWorker.js';
 
-Notification.requestPermission();
-
+if (!("Notification" in window)) {
+    Notification.requestPermission();
+}
 
 function loadWebWorker(worker) {
     const code = worker.toString();
@@ -92,6 +93,8 @@ function toggleTimer() {
 }
 
 function startTimer() {
+    Notification.requestPermission();
+    
     timer.active = true;
     timerIntervalWorker.postMessage('start');
     // console.log("timer started");
