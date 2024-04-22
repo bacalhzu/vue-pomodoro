@@ -1,8 +1,10 @@
 <script setup>
+import { SpeedInsights } from "@vercel/speed-insights/vue";
 import Timer from './components/Timer/Timer.vue';
 </script>
 
 <template>
+    <SpeedInsights />
     <main>
         <header>        
             <a class="logo" href="."><h1>Simplemodoro</h1></a>
