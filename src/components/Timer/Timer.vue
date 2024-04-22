@@ -153,7 +153,7 @@ function showSettings() {
 }
 
 timerIntervalWorker.onmessage = () => {
-    cookie = 'keepActive=true';
+    document.cookie = 'keepActive=true';
     if (timer.countdown.seconds > 0)
         timer.countdown.seconds--;
 
