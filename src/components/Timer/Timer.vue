@@ -107,7 +107,7 @@ function finishTimer(skip = false) {
         playAudio();        
 
     stopTimer();
-
+    
     let nextType = timer.currentPhase;
     if (timer.currentPhase === 'focus') {
         nextType = 'short';
@@ -121,6 +121,7 @@ function finishTimer(skip = false) {
         nextType = 'focus'
     
     resetTimer(nextType);
+    changeTitle();
 }
 
 function resetTimer(type) {
@@ -132,7 +133,7 @@ function resetTimer(type) {
 
 function playAudio() {
 
-    import('@/assets/audio/finished_777.ogg')
+    import('@/assets/audio/finished_01.mp3')
     .then(res => {
         // console.log(res.default);
         let audio = new Audio(res.default);
@@ -141,11 +142,11 @@ function playAudio() {
 }
 
 function changeTitle() {
-    if (timer.active) {
-        document.title = `${zeroFill(timer.countdown.minutes)}:${zeroFill(timer.countdown.seconds)} - ${message.value}`;
-    }
-    else
-        document.title = 'Minimalist Pomodoro Timer - Simplemodoro';
+    // if (timer.active) {
+    document.title = `${zeroFill(timer.countdown.minutes)}:${zeroFill(timer.countdown.seconds)} - ${message.value}`;
+    // }
+    // else
+    //     document.title = 'Minimalist Pomodoro Timer - Simplemodoro';
 }
 
 function showSettings() {
