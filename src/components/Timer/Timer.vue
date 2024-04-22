@@ -156,7 +156,10 @@ function changeTitle() {
 }
 
 function notify(msg) {
-    new Notification(msg);
+    if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        var notification = new Notification(msg);
+    }
 }
 
 function showSettings() {
