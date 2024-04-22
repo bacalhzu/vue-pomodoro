@@ -89,7 +89,9 @@ function toggleTimer() {
 }
 
 function startTimer() {
-    Notification.requestPermission();
+    if (!("Notification" in window)) {
+        Notification.requestPermission();
+    }
     
     timer.active = true;
     timerIntervalWorker.postMessage('start');
