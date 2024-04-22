@@ -154,7 +154,7 @@ function showSettings() {
 }
 
 timerIntervalWorker.onmessage = () => {
-    document.cookie = 'keepActive=true';
+    document.cookie = 'keepActive=false';    
     if (timer.countdown.seconds > 0)
         timer.countdown.seconds--;
 
@@ -168,6 +168,7 @@ timerIntervalWorker.onmessage = () => {
         timer.countdown.minutes--;            
     }
     changeTitle();
+    document.cookie = 'keepActive=true';
 }
 </script>
 
