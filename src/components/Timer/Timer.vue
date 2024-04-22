@@ -89,6 +89,14 @@ function toggleTimer() {
 }
 
 function startTimer() {
+    startAudioEngine();
+
+    navigator.wakeLock.request('screen').then(
+        (res) => {
+            console.log(res);
+        }
+    )
+    
     if (("Notification" in window)) {
         Notification.requestPermission();
     }
@@ -136,11 +144,20 @@ function resetTimer(type) {
 }
 
 function playAudio() {
-
     import('@/assets/audio/finished_01.mp3')
     .then(res => {
         // console.log(res.default);
         let audio = new Audio(res.default);
+        audio.play();
+    });
+}
+
+function startAudioEngine() {
+    import('@/assets/audio/finished_01.mp3')
+    .then(res => {
+        // console.log(res.default);
+        let audio = new Audio(res.default);
+        audio.volume = 0;
         audio.play();
     });
 }
