@@ -4,8 +4,8 @@ import Timer from './components/Timer/Timer.vue';
 </script>
 
 <template>
-    <SpeedInsights />
     <main>
+        <SpeedInsights />
         <header>        
             <a class="logo" href="."><h1>Simplemodoro</h1></a>
         </header>
