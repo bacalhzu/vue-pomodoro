@@ -31,7 +31,7 @@ const config = reactive({
             },
             short: {
                 maxMinutes: 0,
-                maxSeconds: 5  
+                maxSeconds: 6  
             },
             long: {
                 maxMinutes: 15,
