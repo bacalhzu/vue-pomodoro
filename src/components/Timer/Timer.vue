@@ -89,7 +89,7 @@ function toggleTimer() {
 }
 
 function startTimer() {
-    if (!("Notification" in window)) {
+    if (("Notification" in window)) {
         Notification.requestPermission();
     }
     
