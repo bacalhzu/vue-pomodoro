@@ -5,7 +5,7 @@ import Timer from './components/Timer/Timer.vue';
 <template>
     <main>
         <header>        
-            <a class="logo" href=".">Simplemodoro</a>   
+            <a class="logo" href="."><h1>Simplemodoro</h1></a>
         </header>
         <Timer class="timer"/>
         <footer>
@@ -21,7 +21,7 @@ import Timer from './components/Timer/Timer.vue';
 
     header {
         width: 95%;
-        height: 60px;
+        height: 80px;
 
         display: flex;
         justify-content: center;
@@ -32,6 +32,11 @@ import Timer from './components/Timer/Timer.vue';
         /* border-bottom: 2px solid white; */
         margin-bottom: 40px;
     }
+
+    header a h1 {
+        font-size: 18pt;
+    }
+
     .logo {
         color: #FFF;
         text-decoration: none;
