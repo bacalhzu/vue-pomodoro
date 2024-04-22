@@ -2,10 +2,6 @@
 import { computed, reactive } from 'vue';
 import timerWorker from './timerWorker.js';
 
-if (!("Notification" in window)) {
-    Notification.requestPermission();
-}
-
 function loadWebWorker(worker) {
     const code = worker.toString();
     const blob = new Blob(['('+code+')()']);
