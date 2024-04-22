@@ -2,6 +2,9 @@
 import { computed, reactive } from 'vue';
 import timerWorker from './timerWorker.js';
 
+Notification.requestPermission();
+
+
 function loadWebWorker(worker) {
     const code = worker.toString();
     const blob = new Blob(['('+code+')()']);
@@ -26,8 +29,8 @@ const config = reactive({
                 maxSeconds: 0 
             },
             short: {
-                maxMinutes: 5,
-                maxSeconds: 0  
+                maxMinutes: 0,
+                maxSeconds: 5  
             },
             long: {
                 maxMinutes: 15,
@@ -149,6 +152,10 @@ function changeTitle() {
     //     document.title = 'Minimalist Pomodoro Timer - Simplemodoro';
 }
 
+function notify(msg) {
+    new Notification(msg);
+}
+
 function showSettings() {
     alert("Coming soon!")
 }
@@ -161,6 +168,7 @@ timerIntervalWorker.onmessage = () => {
     if (timer.countdown.seconds === 0) {
         if (timer.countdown.minutes === 0) {    
             finishTimer();
+            notify(message.value);
             return;
         }
         
