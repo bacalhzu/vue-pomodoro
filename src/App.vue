@@ -1,5 +1,5 @@
 <script setup>
-import Timer from './components/Timer.vue';
+import Timer from './components/Timer/Timer.vue';
 </script>
 
 <template>
@@ -81,4 +81,4 @@ import Timer from './components/Timer.vue';
         /* text-decoration: none; */
         color: inherit;
     }
-</style>
+</style>./components/Timer/Timer.vue

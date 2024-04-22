@@ -1,5 +1,12 @@
 <script setup>
 import { computed, reactive } from 'vue';
+import timerWorker from './timerWorker.js';
+
+function loadWebWorker(worker) {
+    const code = worker.toString();
+    const blob = new Blob(['('+code+')()']);
+    return new Worker(URL.createObjectURL(blob));
+}
 
 function zeroFill(value) {
     return ('00'+value).slice(-2);
@@ -69,25 +76,30 @@ const message = computed(() => {
     return message;
 });
 
-let timerInterval;
+var timerIntervalWorker = loadWebWorker(timerWorker);
+
 function toggleTimer() {
     
     if (timer.active === false)
         startTimer();
     else 
         stopTimer();
-    
-    timer.active = !timer.active;
+
+    changeTitle();
 }
 
 function startTimer() {
+    timer.active = true;
+    timerIntervalWorker.postMessage('start');
     // console.log("timer started");
-    timerInterval = setInterval(executeTimer, 1000);
+    changeTitle();
 }
 
 function stopTimer() {
+    timer.active = false;
     // console.log("timer stopped");
-    clearInterval(timerInterval);
+    timerIntervalWorker.postMessage('stop');
+    changeTitle();
 }
 
 function finishTimer(skip = false) {
@@ -96,7 +108,6 @@ function finishTimer(skip = false) {
 
     stopTimer();
 
-    
     let nextType = timer.currentPhase;
     if (timer.currentPhase === 'focus') {
         nextType = 'short';
@@ -119,7 +130,29 @@ function resetTimer(type) {
     timer.countdown.seconds = config.timer.duration[timer.currentPhase].maxSeconds;   
 }
 
-function executeTimer() {
+function playAudio() {
+
+    import('@/assets/audio/finished_777.ogg')
+    .then(res => {
+        // console.log(res.default);
+        let audio = new Audio(res.default);
+        audio.play();
+    });
+}
+
+function changeTitle() {
+    if (timer.active) {
+        document.title = `${zeroFill(timer.countdown.minutes)}:${zeroFill(timer.countdown.seconds)} - ${message.value}`;
+    }
+    else
+        document.title = 'Minimalist Pomodoro Timer - Simplemodoro';
+}
+
+function showSettings() {
+    alert("Coming soon!")
+}
+
+timerIntervalWorker.onmessage = () => {
     // console.log("timer tick");
 
     if (timer.countdown.seconds > 0)
@@ -134,20 +167,7 @@ function executeTimer() {
         timer.countdown.seconds = 59;
         timer.countdown.minutes--;            
     }
-}
-
-function playAudio() {
-
-    import('@/assets/audio/finished_777.ogg')
-    .then(res => {
-        // console.log(res.default);
-        let audio = new Audio(res.default);
-        audio.play();
-    });
-}
-
-function showSettings() {
-    alert("Coming soon!")
+    changeTitle();
 }
 </script>
 
