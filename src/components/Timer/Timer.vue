@@ -91,11 +91,10 @@ function toggleTimer() {
 function startTimer() {
     startAudioEngine();
 
-    navigator.wakeLock.request('screen').then(
-        (res) => {
-            console.log(res);
-        }
-    )
+    try {
+        navigator.wakeLock.request('screen').then((res) => {})
+    }
+    catch (e) {}
     
     if (("Notification" in window)) {
         Notification.requestPermission();
