@@ -82,4 +82,4 @@ import Timer from './components/Timer/Timer.vue';
         /* text-decoration: none; */
         color: inherit;
     }
-</style>./components/Timer/Timer.vue
+</style>
