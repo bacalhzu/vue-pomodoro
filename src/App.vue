@@ -9,7 +9,7 @@ import Timer from './components/Timer/Timer.vue';
         <header>        
             <a class="logo" href="."><h1>Simplemodoro</h1></a>
         </header>
-        <Timer class="timer"/>
+        <Timer />
         <footer>
             <span class="madeby">Made by Davi Bacalhau ♥</span>     
             <a class="madeby-link" href="http://littlesekii.com" target="_blank">littlesekii.com</a>
@@ -58,12 +58,6 @@ import Timer from './components/Timer/Timer.vue';
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-    .timer {
-        z-index: 1;
-        background-color: var(--primary);
-        padding-top: 20px;
-        padding-bottom: 20px;
     }
     footer {
         z-index: 0;

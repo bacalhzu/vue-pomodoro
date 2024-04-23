@@ -123,7 +123,7 @@ function finishTimer(skip = false) {
     let nextPhase = timer.currentPhase;
     if (timer.currentPhase === 'focus') {
         nextPhase = 'short';
-        if(timer.currentInterval >= 4) {
+        if(timer.currentInterval >= config.timer.longBreakInterval) {
             timer.currentInterval = 0;
             nextPhase = 'long';
         }
@@ -180,19 +180,21 @@ function notify(msg) {
 function showSettings() {
     config.changingSettings = true;
     stopTimer();
-    resetTimer(timer.currentPhase);
+    resetTimer('focus');
     changeTitle();
 }
 
 function saveSettings() {
     config.changingSettings = false;
     stopTimer();
-    resetTimer(timer.currentPhase);
+    resetTimer('focus');
+    timer.currentInterval = 1;
+    // console.log(timer.currentInterval);
+    // console.log(config.timer.longBreakInterval);
     changeTitle();
 }
 
 timerIntervalWorker.onmessage = () => {
-    document.cookie = 'keepActive=false';    
     if (timer.countdown.seconds > 0)
         timer.countdown.seconds--;
 
@@ -207,7 +209,6 @@ timerIntervalWorker.onmessage = () => {
         timer.countdown.minutes--;            
     }
     changeTitle();
-    document.cookie = 'keepActive=true';
 }
 </script>
 
@@ -297,7 +298,16 @@ timerIntervalWorker.onmessage = () => {
                     :
                     <input class="settings-timer-time-long-seg" type="number" v-model="config.timer.duration.long.maxSeconds">
                 </div>
-            </div>    
+            </div>
+
+            <div class="settings-timer-module">
+                <div class="settings-timer-time-title">
+                    Long Break Interval
+                </div>
+                <div class="settings-timer-time-textbox">
+                    <input class="settings-timer-time-long-interval" type="number" v-model="config.timer.longBreakInterval">
+                </div>
+            </div>   
         </div>
         
         <button 
@@ -459,7 +469,7 @@ timerIntervalWorker.onmessage = () => {
     }
 
     .settings-timer {
-        max-width: 360px;
+        max-width: 400px;
         width: 95%;
     }
 
@@ -469,12 +479,11 @@ timerIntervalWorker.onmessage = () => {
     }
 
     .settings-timer-title {
-        font-size: 14pt;
+        font-size: 12pt;
         margin-bottom: 20px;
         font-weight: 600;
 
         width: 100%;
-
 
         padding-bottom: 5px;
 
@@ -482,9 +491,15 @@ timerIntervalWorker.onmessage = () => {
     }
 
     .settings-timer-module {
-        padding: 0 20px;
+        /* padding: 0 20px; */
 
         margin-bottom: 15px;
+    }
+
+    .settings-timer-module:last-child {
+        /* padding: 0 20px; */
+
+        margin-bottom: 30px;
     }
 
     .settings-timer-time {
@@ -499,6 +514,8 @@ timerIntervalWorker.onmessage = () => {
 
     .settings-timer-time-textbox {
         /* background-color: aliceblue; */
+        max-width: 400px;
+        /* width: 98%; */
         font-size: 13pt;
         font-weight: 600;
 
@@ -510,10 +527,9 @@ timerIntervalWorker.onmessage = () => {
     }
     .settings-timer-time-textbox input {
         background-color: var(--primary-dark);
-        padding: 8px 10px;
-
-        max-width: 180px;
-        width: 95%;
+        padding: 8px 10px; 
+        
+        width: 100%;
 
         /* font-size: 11pt; */
         border: none;
@@ -521,14 +537,20 @@ timerIntervalWorker.onmessage = () => {
 
         color: white;
         font-family: 'Nunito';
+
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+        -moz-appearance: textfield;
     }
 
     .settings-timer-time-textbox input:focus {
-        outline: 2px solid white;
+        outline: 1px solid white;
     }
 
     .settings-save-button {
-        max-width: 360px;
+        max-width: 400px;
         width: 95%;
     }
 
