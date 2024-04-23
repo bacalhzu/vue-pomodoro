@@ -13,6 +13,7 @@ function zeroFill(value) {
 }
 
 const config = reactive({
+    changingSettings: false,
     timer: {
         phases: [
             'focus',
@@ -26,8 +27,8 @@ const config = reactive({
                 maxSeconds: 0 
             },
             short: {
-                maxMinutes: 0,
-                maxSeconds: 6  
+                maxMinutes: 5,
+                maxSeconds: 0  
             },
             long: {
                 maxMinutes: 15,
@@ -119,19 +120,19 @@ function finishTimer(skip = false) {
 
     stopTimer();
     
-    let nextType = timer.currentPhase;
+    let nextPhase = timer.currentPhase;
     if (timer.currentPhase === 'focus') {
-        nextType = 'short';
+        nextPhase = 'short';
         if(timer.currentInterval >= 4) {
             timer.currentInterval = 0;
-            nextType = 'long';
+            nextPhase = 'long';
         }
         timer.currentInterval++;
     }
     else 
-        nextType = 'focus'
+        nextPhase = 'focus'
     
-    resetTimer(nextType);
+    resetTimer(nextPhase);
     changeTitle();
 }
 
@@ -139,7 +140,7 @@ function resetTimer(type) {
     timer.active = false;
     timer.currentPhase = type;
     timer.countdown.minutes = config.timer.duration[timer.currentPhase].maxMinutes;
-    timer.countdown.seconds = config.timer.duration[timer.currentPhase].maxSeconds;   
+    timer.countdown.seconds = config.timer.duration[timer.currentPhase].maxSeconds;  
 }
 
 function playAudio() {
@@ -162,11 +163,11 @@ function startAudioEngine() {
 }
 
 function changeTitle() {
-    // if (timer.active) {
-    document.title = `${zeroFill(timer.countdown.minutes)}:${zeroFill(timer.countdown.seconds)} - ${message.value}`;
-    // }
-    // else
-    //     document.title = 'Minimalist Pomodoro Timer - Simplemodoro';
+    if (!config.changingSettings) {
+        document.title = `${zeroFill(timer.countdown.minutes)}:${zeroFill(timer.countdown.seconds)} - ${message.value}`;
+    }
+    else
+        document.title = 'Minimalist Pomodoro Timer - Simplemodoro';
 }
 
 function notify(msg) {
@@ -177,7 +178,17 @@ function notify(msg) {
 }
 
 function showSettings() {
-    alert("Coming soon!")
+    config.changingSettings = true;
+    stopTimer();
+    resetTimer(timer.currentPhase);
+    changeTitle();
+}
+
+function saveSettings() {
+    config.changingSettings = false;
+    stopTimer();
+    resetTimer(timer.currentPhase);
+    changeTitle();
 }
 
 timerIntervalWorker.onmessage = () => {
@@ -201,7 +212,7 @@ timerIntervalWorker.onmessage = () => {
 </script>
 
 <template>
-    <div class="timer">
+    <div v-show="!config.changingSettings" class="timer">
         <div class="timer-message">
             {{ message }}
         </div>
@@ -241,6 +252,60 @@ timerIntervalWorker.onmessage = () => {
                 SKIP
             </button>
         </div>
+    </div>
+    <div v-show="config.changingSettings" class="settings">
+        
+        <div class="settings-title">
+            Settings
+        </div>
+
+        <div class="settings-timer">
+            <div class="settings-timer-title">
+                TIMER
+            </div>
+            <!-- <div class="settings-timer-sub-title">
+                Time (minutes : seconds)
+            </div> -->
+            <div class="settings-timer-module">
+                <div class="settings-timer-time-title">
+                    Focus (minutes : seconds)
+                </div>
+                <div class="settings-timer-time-textbox">
+                    <input class="settings-timer-time-focus-min" type="number" v-model="config.timer.duration.focus.maxMinutes">
+                    :
+                    <input class="settings-timer-time-focus-seg" type="number" v-model="config.timer.duration.focus.maxSeconds">
+                </div>
+            </div>      
+
+            <div class="settings-timer-module">
+                <div class="settings-timer-time-title">
+                    Short Break (minutes : seconds)
+                </div>
+                <div class="settings-timer-time-textbox">
+                    <input class="settings-timer-time-short-min" type="number" v-model="config.timer.duration.short.maxMinutes">
+                    :
+                    <input class="settings-timer-time-short-seg" type="number" v-model="config.timer.duration.short.maxSeconds">
+                </div>
+            </div> 
+            
+            <div class="settings-timer-module">
+                <div class="settings-timer-time-title">
+                    Long Break (minutes : seconds)
+                </div>
+                <div class="settings-timer-time-textbox">
+                    <input class="settings-timer-time-long-min" type="number" v-model="config.timer.duration.long.maxMinutes">
+                    :
+                    <input class="settings-timer-time-long-seg" type="number" v-model="config.timer.duration.long.maxSeconds">
+                </div>
+            </div>    
+        </div>
+        
+        <button 
+            @click="saveSettings()" 
+            class="timer-controls-button tcb-toggle settings-save-button"
+        >
+            SAVE
+        </button>
     </div>
 
 </template>
@@ -380,6 +445,110 @@ timerIntervalWorker.onmessage = () => {
 
         transition: margin 0.5s, opacity 0.5s;
     }
+    
+    .settings {
+        /* background-color: #FFF; */
 
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+
+        justify-content: center;
+        align-items: center;
+    }
+
+    .settings-timer {
+        max-width: 360px;
+        width: 95%;
+    }
+
+    .settings-title {
+        font-size: 16pt;
+        margin-bottom: 10px;
+    }
+
+    .settings-timer-title {
+        font-size: 14pt;
+        margin-bottom: 20px;
+        font-weight: 600;
+
+        width: 100%;
+
+
+        padding-bottom: 5px;
+
+        border-bottom: 1px solid var(--primary-light);
+    }
+
+    .settings-timer-module {
+        padding: 0 20px;
+
+        margin-bottom: 15px;
+    }
+
+    .settings-timer-time {
+        margin-left: 10px;
+    }
+
+    .settings-timer-time-title {
+        font-size: 12pt;
+        margin-bottom: 3px;
+        /* font-weight: 600; */
+    }
+
+    .settings-timer-time-textbox {
+        /* background-color: aliceblue; */
+        font-size: 13pt;
+        font-weight: 600;
+
+        display: flex;
+        /* flex-direction: column; */
+        /* justify-content: flex-start; */
+        align-items: center;
+        gap: 5px;
+    }
+    .settings-timer-time-textbox input {
+        background-color: var(--primary-dark);
+        padding: 8px 10px;
+
+        max-width: 180px;
+        width: 95%;
+
+        /* font-size: 11pt; */
+        border: none;
+        border-radius: 5px;
+
+        color: white;
+        font-family: 'Nunito';
+    }
+
+    .settings-timer-time-textbox input:focus {
+        outline: 2px solid white;
+    }
+
+    .settings-save-button {
+        max-width: 360px;
+        width: 95%;
+    }
+
+
+    /*
+    <div class="settings-timer">
+            <div class="settings-timer-title">
+                TIMER
+            </div>
+            <div class="settings-timer-sub-title">
+                Time (minutes : seconds)
+            </div>
+            <div class="settings-timer-time-focus">
+                <div class="settings-timer-time-focus-title">
+                    Focus
+                </div>
+                <div class="settings-timer-time-focus-textbox">
+                    <input class="settings-timer-time-focus-min" type="number" v-model="config.timer.duration.focus.maxMinutes">
+                    <input class="settings-timer-time-focus-seg" type="number" v-model="config.timer.duration.focus.maxSeconds">
+                </div>
+    */
 
 </style>
